@@ -35,8 +35,10 @@ namespace employee_benefits_api
 
             services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
 
-            //add dependency injection link
+            //add dependency injection links
             services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<IValidateEmployeeService, ValidateEmployeeService>();
+
 
         }
 

@@ -13,10 +13,13 @@ namespace employee_benefits_api.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService employeeService;
+        private readonly IValidateEmployeeService validateEmployeeService;
 
-        public EmployeeController(IEmployeeService _employeeService)
+
+        public EmployeeController(IEmployeeService _employeeService, IValidateEmployeeService _validateEmployeeService)
         {
             employeeService = _employeeService;
+            validateEmployeeService = _validateEmployeeService;
         }
 
         /// <summary>
@@ -35,9 +38,24 @@ namespace employee_benefits_api.Controllers
         /// The list of employees with their dependents and associated cost per check
         /// </returns>
         [HttpPost("CreateEmployee")]
-        public async Task<EmployeeList> CreateEmployee([FromBody]Employee employee)
+        public async Task<CreateEmployeeResult> CreateEmployee([FromBody]Employee employee)
         {
-            return await employeeService.CreateEmployee(employee);
+            //validate the employee
+            var result = await validateEmployeeService.ValidateEmployee(employee);
+            //if successful
+            if (result.Success)
+            {
+                return await employeeService.CreateEmployee(employee);
+            }
+            else
+            {
+                return new CreateEmployeeResult()
+                {
+                    Success = false,
+                    Message = result.Message,
+                    EmployeeList = new EmployeeList()
+                };
+            }
         }
     }
 }

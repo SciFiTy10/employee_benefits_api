@@ -17,7 +17,7 @@ namespace employee_benefits_api.Services
             this.databaseConfig = databaseConfig;
         }
 
-        public async Task<EmployeeList> CreateEmployee(Employee employee)
+        public async Task<CreateEmployeeResult> CreateEmployee(Employee employee)
         {
             try
             {
@@ -45,12 +45,22 @@ namespace employee_benefits_api.Services
                 });
 
                 //return the employees
-                return new EmployeeList() { Employees = employees };
+                return new CreateEmployeeResult()
+                {
+                    Success = true,
+                    Message = "Success! Employee was added.",
+                    EmployeeList = new EmployeeList() { Employees = employees}
+                };
             }
             catch(Exception e)
             {
                 var ex = e;
-                return new EmployeeList();
+                return new CreateEmployeeResult()
+                {
+                    Success = false,
+                    Message = "An error occurred during the add process.",
+                    EmployeeList = new EmployeeList()
+                };
             }
 
         }
