@@ -5,7 +5,7 @@ namespace employee_benefits_api.Classes
     {
         public int DependentId { get; set; }
         public string DependentType { get; set; }
-        public double CostPerCheck {
+        public double DependentCostPerCheck {
             get
             {
                 //normal cost of benefits
