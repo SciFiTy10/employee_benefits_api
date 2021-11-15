@@ -34,8 +34,8 @@ namespace employee_benefits_api.Controllers
         /// <returns>
         /// The list of employees with their dependents and associated cost per check
         /// </returns>
-        [HttpPost]
-        public async Task<EmployeeList> Post([FromBody]Employee employee)
+        [HttpPost("CreateEmployee")]
+        public async Task<EmployeeList> CreateEmployee([FromBody]Employee employee)
         {
             return await employeeService.CreateEmployee(employee);
         }
