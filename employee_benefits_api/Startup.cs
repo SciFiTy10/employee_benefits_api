@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using employee_benefits_api.Database;
 using employee_benefits_api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,13 +31,17 @@ namespace employee_benefits_api
 
             services.AddControllers();
 
+            services.AddSingleton(new DatabaseConfig { Name = Configuration["DatabaseName"] });
+
+            services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
+
             //add dependency injection link
             services.AddTransient<IEmployeeService, EmployeeService>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseCors(corsPolicyBuilder =>
                 corsPolicyBuilder.WithOrigins("http://localhost:3000")
@@ -59,6 +64,8 @@ namespace employee_benefits_api
             {
                 endpoints.MapControllers();
             });
+
+            serviceProvider.GetService<IDatabaseBootstrap>().SetUp();
         }
     }
 }
