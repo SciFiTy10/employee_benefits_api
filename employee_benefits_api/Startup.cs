@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using employee_benefits_api.Database;
+using employee_benefits_api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,12 +27,30 @@ namespace employee_benefits_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddControllers();
+
+            services.AddSingleton(new DatabaseConfig { Name = Configuration["DatabaseName"] });
+
+            services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
+
+            //add dependency injection links
+            services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<IValidateEmployeeService, ValidateEmployeeService>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
+            app.UseCors(corsPolicyBuilder =>
+                corsPolicyBuilder.WithOrigins("http://localhost:3000")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -46,6 +66,8 @@ namespace employee_benefits_api
             {
                 endpoints.MapControllers();
             });
+
+            serviceProvider.GetService<IDatabaseBootstrap>().SetUp();
         }
     }
 }
