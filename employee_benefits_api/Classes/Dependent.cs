@@ -4,6 +4,7 @@ namespace employee_benefits_api.Classes
     public class Dependent : Person
     {
         public int DependentId { get; set; }
+        public string DependentType { get; set; }
         public double CostPerCheck {
             get
             {

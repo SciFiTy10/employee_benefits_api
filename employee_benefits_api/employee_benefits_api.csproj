@@ -7,8 +7,10 @@
 
   <ItemGroup>
     <None Remove="Classes\" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>
