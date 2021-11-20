@@ -26,7 +26,7 @@ namespace employee_benefits_api.Controllers
         /// Returns the list of employees with their dependents and associated cost per check
         /// </summary>
         [HttpGet]
-        public async Task<EmployeeList> Get()
+        public async Task<EmployeeList> GetEmployeeList()
         {
             return await employeeService.GetEmployeeList();
         }
