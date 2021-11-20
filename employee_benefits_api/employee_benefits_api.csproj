@@ -12,11 +12,15 @@
     <None Remove="Microsoft.Data.Sqlite" />
     <None Remove="Dapper" />
     <None Remove="Newtonsoft.Json" />
+    <None Remove="Classes\Result\" />
+    <None Remove="Classes\People\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\" />
     <Folder Include="Services\" />
     <Folder Include="Database\" />
+    <Folder Include="Classes\Result\" />
+    <Folder Include="Classes\People\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.0" />

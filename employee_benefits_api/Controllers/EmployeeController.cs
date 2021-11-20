@@ -26,7 +26,7 @@ namespace employee_benefits_api.Controllers
         /// Returns the list of employees with their dependents and associated cost per check
         /// </summary>
         [HttpGet]
-        public async Task<EmployeeList> Get()
+        public async Task<EmployeeList> GetEmployeeList()
         {
             return await employeeService.GetEmployeeList();
         }
@@ -38,23 +38,38 @@ namespace employee_benefits_api.Controllers
         /// The list of employees with their dependents and associated cost per check
         /// </returns>
         [HttpPost("CreateEmployee")]
-        public async Task<CreateEmployeeResult> CreateEmployee([FromBody]Employee employee)
+        public async Task<ActionResult> CreateEmployee([FromBody]Employee employee)
         {
             //validate the employee
-            var result = await validateEmployeeService.ValidateEmployee(employee);
-            //if successful
-            if (result.Success)
+            var validationResult = await validateEmployeeService.ValidateEmployee(employee);
+            //if validation was successful
+            if (validationResult.Success)
             {
-                return await employeeService.CreateEmployee(employee);
+                //create the employee
+                var createEmployeeResult = await employeeService.CreateEmployee(employee);
+                //if the employee was created
+                if (createEmployeeResult.Success)
+                {
+                    //get the latest employee list
+                    var employeeList = await employeeService.GetEmployeeList();
+                    //return the result
+                    return new CreateEmployeeResult()
+                    {
+                        Success = true,
+                        Message = "Success! Employee was added.",
+                        EmployeeList = employeeList
+                    };
+                }
+                else
+                {
+                    //return the error message
+                    return createEmployeeResult;
+                }
             }
             else
             {
-                return new CreateEmployeeResult()
-                {
-                    Success = false,
-                    Message = result.Message,
-                    EmployeeList = new EmployeeList()
-                };
+                //return the error message
+                return validationResult;
             }
         }
     }

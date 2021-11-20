@@ -5,6 +5,6 @@ namespace employee_benefits_api.Services
 {
     public interface IValidateEmployeeService
     {
-        Task<ValidationResult> ValidateEmployee(Employee employee);
+        Task<Result> ValidateEmployee(Employee employee);
     }
 }

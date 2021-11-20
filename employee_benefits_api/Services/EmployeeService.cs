@@ -17,7 +17,7 @@ namespace employee_benefits_api.Services
             this.databaseConfig = databaseConfig;
         }
 
-        public async Task<CreateEmployeeResult> CreateEmployee(Employee employee)
+        public async Task<Result> CreateEmployee(Employee employee)
         {
             try
             {
@@ -55,11 +55,10 @@ namespace employee_benefits_api.Services
             catch(Exception e)
             {
                 var ex = e;
-                return new CreateEmployeeResult()
+                return new Result()
                 {
                     Success = false,
-                    Message = "An error occurred during the add process.",
-                    EmployeeList = new EmployeeList()
+                    Message = "An error occurred during the add process."
                 };
             }
 

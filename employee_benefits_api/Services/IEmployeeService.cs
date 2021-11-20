@@ -10,6 +10,6 @@ namespace employee_benefits_api.Services
     public interface IEmployeeService
     {
         Task<EmployeeList> GetEmployeeList();
-        Task<CreateEmployeeResult> CreateEmployee(Employee employee);
+        Task<Result> CreateEmployee(Employee employee);
     }
 }
